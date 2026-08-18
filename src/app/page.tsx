@@ -1,69 +1,118 @@
-import Image from "next/image";
+import Link from "next/link";
+import {
+  PenTool,
+  BarChart3,
+  Share2,
+  ArrowRight,
+  Sparkles,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+const modules = [
+  {
+    title: "Content & Copywriting AI",
+    description:
+      "Generate compelling copy, optimize for SEO, and brainstorm content ideas with AI assistance.",
+    href: "/content",
+    icon: <PenTool className="h-6 w-6" />,
+    color: "text-[#4a6741]",
+    bgColor: "bg-[#6b8f71]/15",
+    features: ["AI Copywriting", "SEO Optimizer", "Content Ideas"],
+  },
+  {
+    title: "Analytics & Reporting",
+    description:
+      "Track campaign performance, build UTM links, calculate ROI, and generate reports.",
+    href: "/analytics",
+    icon: <BarChart3 className="h-6 w-6" />,
+    color: "text-[#7b9bab]",
+    bgColor: "bg-[#7b9bab]/15",
+    features: ["Campaign Dashboard", "UTM Builder", "ROI Calculator"],
+  },
+  {
+    title: "Social Media Management",
+    description:
+      "Plan content calendars, schedule posts, research hashtags, and manage your social presence.",
+    href: "/social",
+    icon: <Share2 className="h-6 w-6" />,
+    color: "text-[#c49a6c]",
+    bgColor: "bg-[#c49a6c]/15",
+    features: ["Content Calendar", "Post Scheduler", "Hashtag Research"],
+  },
+];
+
+const stats = [
+  { label: "Content Generated", value: "1,234", icon: <Sparkles className="h-4 w-4" /> },
+  { label: "Campaigns Tracked", value: "56", icon: <TrendingUp className="h-4 w-4" /> },
+  { label: "Posts Scheduled", value: "89", icon: <Users className="h-4 w-4" /> },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">
+          Welcome to MarketingHub. Your all-in-one marketing toolkit.
+        </p>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid gap-4 md:grid-cols-3">
+        {stats.map((stat) => (
+          <Card key={stat.label}>
+            <CardContent className="flex items-center gap-4 p-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-md border-2 border-border bg-primary/10 font-bold text-primary shadow-[2px_2px_0px_1px_var(--color-brutal-shadow)]">
+                {stat.icon}
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{stat.value}</p>
+                <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Module Cards */}
+      <div>
+        <h2 className="mb-4 text-lg font-bold uppercase tracking-wider">Tools</h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          {modules.map((mod) => (
+            <Link key={mod.href} href={mod.href}>
+              <Card className="group h-full">
+                <CardHeader>
+                  <div
+                    className={`mb-2 flex h-12 w-12 items-center justify-center rounded-md border-2 border-border ${mod.bgColor} ${mod.color} shadow-[2px_2px_0px_1px_var(--color-brutal-shadow)]`}
+                  >
+                    {mod.icon}
+                  </div>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    {mod.title}
+                    <ArrowRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                  </CardTitle>
+                  <CardDescription>{mod.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {mod.features.map((f) => (
+                      <span
+                        key={f}
+                        className="rounded-sm border-[1.5px] border-border bg-muted px-2 py-0.5 text-xs font-semibold shadow-[2px_2px_0px_1px_var(--color-brutal-shadow)]"
+                      >
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }

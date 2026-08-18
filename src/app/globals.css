@@ -1,26 +1,200 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Neo-brutalism custom colors */
+  --color-brutal-shadow: #1a1a1a;
+  --color-brutal-green: #6b8f71;
+  --color-brutal-blue: #7b9bab;
+  --color-brutal-clay: #c49a6c;
+  --color-brutal-rose: #b07a7a;
+  --color-brutal-lavender: #9b8fbf;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #f0ece3;
+  --foreground: #1a1a1a;
+  --card: #f7f4ec;
+  --card-foreground: #1a1a1a;
+  --popover: #f7f4ec;
+  --popover-foreground: #1a1a1a;
+  --primary: #4a6741;
+  --primary-foreground: #f7f4ec;
+  --secondary: #e2ddd3;
+  --secondary-foreground: #3a3a3a;
+  --muted: #e8e3d9;
+  --muted-foreground: #6b6b6b;
+  --accent: #7b9bab;
+  --accent-foreground: #f7f4ec;
+  --destructive: #b07a7a;
+  --border: #1a1a1a;
+  --input: #e8e3d9;
+  --ring: #4a6741;
+  --chart-1: #6b8f71;
+  --chart-2: #7b9bab;
+  --chart-3: #c49a6c;
+  --chart-4: #9b8fbf;
+  --chart-5: #b07a7a;
+  --radius: 0.375rem;
+  --sidebar: #e8e3d9;
+  --sidebar-foreground: #1a1a1a;
+  --sidebar-primary: #4a6741;
+  --sidebar-primary-foreground: #f7f4ec;
+  --sidebar-accent: #d5d0c6;
+  --sidebar-accent-foreground: #1a1a1a;
+  --sidebar-border: #1a1a1a;
+  --sidebar-ring: #4a6741;
+}
+
+.dark {
+  --background: #1e1e1e;
+  --foreground: #e8e3d9;
+  --card: #2a2a2a;
+  --card-foreground: #e8e3d9;
+  --popover: #2a2a2a;
+  --popover-foreground: #e8e3d9;
+  --primary: #8ab88f;
+  --primary-foreground: #1a1a1a;
+  --secondary: #333333;
+  --secondary-foreground: #e8e3d9;
+  --muted: #333333;
+  --muted-foreground: #999999;
+  --accent: #7b9bab;
+  --accent-foreground: #f7f4ec;
+  --destructive: #c99a9a;
+  --border: #e8e3d9;
+  --input: #333333;
+  --ring: #8ab88f;
+  --chart-1: #8ab88f;
+  --chart-2: #7b9bab;
+  --chart-3: #c49a6c;
+  --chart-4: #9b8fbf;
+  --chart-5: #c99a9a;
+  --sidebar: #252525;
+  --sidebar-foreground: #e8e3d9;
+  --sidebar-primary: #8ab88f;
+  --sidebar-primary-foreground: #1a1a1a;
+  --sidebar-accent: #333333;
+  --sidebar-accent-foreground: #e8e3d9;
+  --sidebar-border: #e8e3d9;
+  --sidebar-ring: #8ab88f;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Neo-Brutalism base styles */
+@layer base {
+  .dark * {
+    border-color: var(--border) !important;
+  }
+}
+
+/* Card neo-brutalism */
+.card-brutal {
+  border: 2px solid var(--border) !important;
+  box-shadow: 4px 4px 0px var(--color-brutal-shadow) !important;
+  border-radius: 0.5rem !important;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.card-brutal:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px var(--color-brutal-shadow) !important;
+}
+.card-brutal:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--color-brutal-shadow) !important;
+}
+
+/* Button neo-brutalism */
+.btn-brutal {
+  border: 2px solid var(--border) !important;
+  box-shadow: 3px 3px 0px var(--color-brutal-shadow) !important;
+  border-radius: 0.375rem !important;
+  font-weight: 600 !important;
+  transition: transform 0.1s, box-shadow 0.1s;
+  cursor: pointer;
+}
+.btn-brutal:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px var(--color-brutal-shadow) !important;
+}
+.btn-brutal:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--color-brutal-shadow) !important;
+}
+
+/* Input neo-brutalism */
+.input-brutal {
+  border: 2px solid var(--border) !important;
+  box-shadow: 3px 3px 0px var(--color-brutal-shadow) !important;
+  border-radius: 0.375rem !important;
+  background: var(--card) !important;
+}
+.input-brutal:focus {
+  outline: 2px solid var(--ring) !important;
+  outline-offset: 1px;
+  box-shadow: 3px 3px 0px var(--color-brutal-shadow) !important;
+}
+
+/* Badge neo-brutalism */
+.badge-brutal {
+  border: 1.5px solid var(--border) !important;
+  box-shadow: 2px 2px 0px var(--color-brutal-shadow) !important;
+  border-radius: 0.25rem !important;
+  font-weight: 600 !important;
 }
