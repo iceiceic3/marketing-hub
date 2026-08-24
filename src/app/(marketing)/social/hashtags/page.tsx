@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Hash, Search, Copy, Check, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { SearchCommand } from "@/components/ui/search-command";
+import { useToast } from "@/components/ui/toast";
 
 interface Hashtag {
   name: string;
@@ -31,11 +33,19 @@ const mockHashtags: Hashtag[] = [
 ];
 
 export default function HashtagsPage() {
+  const { toast } = useToast();
   const [keyword, setKeyword] = useState("");
   const [hashtags, setHashtags] = useState<Hashtag[]>([]);
   const [copiedAll, setCopiedAll] = useState(false);
   const [copiedTag, setCopiedTag] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
+  const [filterQuery, setFilterQuery] = useState("");
+
+  const filteredHashtags = filterQuery
+    ? hashtags.filter((tag) =>
+        tag.name.toLowerCase().includes(filterQuery.toLowerCase())
+      )
+    : hashtags;
 
   const search = async () => {
     if (!keyword) return;
@@ -57,6 +67,7 @@ export default function HashtagsPage() {
     navigator.clipboard.writeText(text);
     setCopiedAll(true);
     setTimeout(() => setCopiedAll(false), 2000);
+    toast({ title: "Hashtags copied!", variant: "success" });
   };
 
   const copySingleTag = (name: string) => {
@@ -134,9 +145,22 @@ export default function HashtagsPage() {
             </Card>
           )}
 
+          {/* Filter */}
+          <SearchCommand
+            value={filterQuery}
+            onChange={setFilterQuery}
+            placeholder="Filter hashtags by name..."
+            className="max-w-sm"
+          />
+
           {/* Hashtag Grid */}
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {hashtags.map((tag) => (
+            {filteredHashtags.length === 0 && filterQuery && (
+              <div className="col-span-full py-8 text-center text-muted-foreground">
+                No hashtags match &quot;{filterQuery}&quot;
+              </div>
+            )}
+            {filteredHashtags.map((tag) => (
               <Card
                 key={tag.name}
                 className={`cursor-pointer transition-colors border-2 border-border shadow-[3px_3px_0px_1px_var(--color-brutal-shadow)] ${

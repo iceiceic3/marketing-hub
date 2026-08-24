@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Calculator, TrendingUp, DollarSign, Users, Percent } from "lucide-react";
+import { useToast } from "@/components/ui/toast";
 
 export default function RoiPage() {
+  const { toast } = useToast();
   const [adSpend, setAdSpend] = useState("");
   const [revenue, setRevenue] = useState("");
   const [leads, setLeads] = useState("");
@@ -26,6 +28,7 @@ export default function RoiPage() {
   const calculate = () => {
     if (spend > 0 && rev > 0) {
       setCalculated(true);
+      toast({ title: "ROI calculated!", description: `Your ROI is ${roi.toFixed(1)}%`, variant: roi >= 100 ? "success" : "warning" });
     }
   };
 
@@ -108,7 +111,7 @@ export default function RoiPage() {
               </Card>
 
               {/* Metrics Grid */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Card className="border-2 border-border shadow-[4px_4px_0px_1px_var(--color-brutal-shadow)]">
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">

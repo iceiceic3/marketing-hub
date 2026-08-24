@@ -15,7 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, Copy, Check, Loader2, Trash2 } from "lucide-react";
+import { Sparkles, Copy, Check, Loader2, Trash2, Download } from "lucide-react";
+import { downloadTextFile } from "@/lib/export";
+import { useToast } from "@/components/ui/toast";
 import type { CopyPlatform, CopyTone, CopyResult } from "@/types/content";
 
 const platforms: { value: CopyPlatform; label: string }[] = [
@@ -38,6 +40,7 @@ const tones: { value: CopyTone; label: string }[] = [
 ];
 
 export default function CopywritingPage() {
+  const { toast } = useToast();
   const [productName, setProductName] = useState("");
   const [targetAudience, setTargetAudience] = useState("");
   const [platform, setPlatform] = useState<CopyPlatform>("instagram-caption");
@@ -58,16 +61,48 @@ export default function CopywritingPage() {
     const mockResults: CopyResult[] = generateMockCopy(platform, tone, productName, targetAudience);
     setResults((prev) => [...mockResults, ...prev]);
     setLoading(false);
+    toast({ title: "Copy generated!", description: `${mockResults.length} variations created.`, variant: "success" });
   };
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+    toast({ title: "Copied to clipboard", variant: "success" });
   };
 
   const deleteResult = (id: string) => {
     setResults((prev) => prev.filter((r) => r.id !== id));
+    toast({ title: "Copy deleted", variant: "default" });
+  };
+
+  const exportAllCopy = () => {
+    if (results.length === 0) return;
+
+    const lines = results.map((result, i) => {
+      const platformLabel = platforms.find((p) => p.value === result.platform)?.label ?? result.platform;
+      const toneLabel = tones.find((t) => t.value === result.tone)?.label ?? result.tone;
+      return [
+        `--- Result ${i + 1} ---`,
+        `Platform: ${platformLabel}`,
+        `Tone: ${toneLabel}`,
+        `Created: ${result.createdAt}`,
+        "",
+        result.content,
+        "",
+      ].join("\n");
+    });
+
+    const header = [
+      "AI Copywriting Export",
+      `Generated: ${new Date().toLocaleString()}`,
+      `Total results: ${results.length}`,
+      "",
+      "================================",
+      "",
+    ].join("\n");
+
+    downloadTextFile(header + lines.join("\n"), "ai-copywriting-results.txt");
   };
 
   return (
@@ -112,7 +147,7 @@ export default function CopywritingPage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Platform</Label>
                 <Select value={platform} onValueChange={(v) => setPlatform(v as CopyPlatform)}>
@@ -189,9 +224,17 @@ export default function CopywritingPage() {
 
         {/* Results */}
         <div className="space-y-4">
-          <h2 className="text-lg font-bold uppercase tracking-wider">
-            Generated Copy {results.length > 0 && `(${results.length})`}
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold uppercase tracking-wider">
+              Generated Copy {results.length > 0 && `(${results.length})`}
+            </h2>
+            {results.length > 0 && (
+              <Button variant="outline" size="sm" onClick={exportAllCopy}>
+                <Download className="mr-2 h-4 w-4" />
+                Export All
+              </Button>
+            )}
+          </div>
           {results.length === 0 ? (
             <Card className="border-2 border-border">
               <CardContent className="flex flex-col items-center justify-center py-12 text-center">

@@ -13,6 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FileText, Download, TrendingUp, Eye, MousePointer, DollarSign } from "lucide-react";
+import { exportToCSV, exportToJSON } from "@/lib/export";
+import { useToast } from "@/components/ui/toast";
 
 interface Report {
   id: string;
@@ -53,6 +55,7 @@ const sampleReports: Report[] = [
 ];
 
 export default function ReportsPage() {
+  const { toast } = useToast();
   const [dateRange, setDateRange] = useState("30d");
   const [reports, setReports] = useState(sampleReports);
 
@@ -66,6 +69,36 @@ export default function ReportsPage() {
     }),
     { impressions: 0, clicks: 0, conversions: 0, spend: 0, revenue: 0 }
   );
+
+  const exportReportsCSV = () => {
+    const flat = reports.map((r) => ({
+      title: r.title,
+      period: r.period,
+      impressions: r.metrics.impressions,
+      clicks: r.metrics.clicks,
+      conversions: r.metrics.conversions,
+      spend: r.metrics.spend,
+      revenue: r.metrics.revenue,
+      generatedAt: r.generatedAt,
+    }));
+    exportToCSV(flat, "report-history.csv");
+    toast({ title: "CSV exported!", description: "Report history downloaded as CSV.", variant: "success" });
+  };
+
+  const exportReportsJSON = () => {
+    const flat = reports.map((r) => ({
+      title: r.title,
+      period: r.period,
+      impressions: r.metrics.impressions,
+      clicks: r.metrics.clicks,
+      conversions: r.metrics.conversions,
+      spend: r.metrics.spend,
+      revenue: r.metrics.revenue,
+      generatedAt: r.generatedAt,
+    }));
+    exportToJSON(flat, "report-history.json");
+    toast({ title: "JSON exported!", description: "Report history downloaded as JSON.", variant: "success" });
+  };
 
   const generateReport = () => {
     const newReport: Report = {
@@ -82,6 +115,7 @@ export default function ReportsPage() {
       generatedAt: new Date().toISOString(),
     };
     setReports((prev) => [newReport, ...prev]);
+    toast({ title: "Report generated!", description: "New report has been added to history.", variant: "success" });
   };
 
   return (
@@ -143,6 +177,14 @@ export default function ReportsPage() {
             <Button onClick={generateReport}>
               <FileText className="mr-2 h-4 w-4" />
               Generate Report
+            </Button>
+            <Button variant="outline" onClick={exportReportsCSV}>
+              <Download className="mr-2 h-4 w-4" />
+              Export CSV
+            </Button>
+            <Button variant="outline" onClick={exportReportsJSON}>
+              <Download className="mr-2 h-4 w-4" />
+              Export JSON
             </Button>
           </div>
         </CardContent>

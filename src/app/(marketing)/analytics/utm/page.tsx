@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LinkIcon, Copy, Check, Trash2 } from "lucide-react";
+import { useToast } from "@/components/ui/toast";
 
 interface UtmLink {
   id: string;
@@ -27,6 +28,7 @@ const presets = [
 ];
 
 export default function UtmPage() {
+  const { toast } = useToast();
   const [baseUrl, setBaseUrl] = useState("");
   const [source, setSource] = useState("");
   const [medium, setMedium] = useState("");
@@ -65,6 +67,7 @@ export default function UtmPage() {
     setCampaign("");
     setTerm("");
     setContent("");
+    toast({ title: "UTM link saved!", variant: "success" });
   };
 
   const applyPreset = (preset: (typeof presets)[0]) => {
@@ -77,6 +80,7 @@ export default function UtmPage() {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+    toast({ title: "Link copied!", variant: "success" });
   };
 
   const deleteLink = (id: string) => {

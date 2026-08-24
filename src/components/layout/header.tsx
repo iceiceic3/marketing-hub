@@ -1,15 +1,38 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Menu, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
-export function Header() {
+interface HeaderProps {
+  onMenuToggle?: () => void;
+  mobileMenuOpen?: boolean;
+}
+
+export function Header({ onMenuToggle, mobileMenuOpen }: HeaderProps) {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="flex h-14 items-center justify-between border-b-2 border-border bg-sidebar px-6">
-      <div />
+    <header className="flex h-14 items-center justify-between border-b-2 border-border bg-sidebar px-4 md:px-6">
+      {/* Hamburger menu button - visible only on mobile/tablet */}
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={onMenuToggle}
+        className="h-9 w-9 md:hidden"
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+      >
+        {mobileMenuOpen ? (
+          <X className="h-5 w-5" />
+        ) : (
+          <Menu className="h-5 w-5" />
+        )}
+      </Button>
+
+      {/* Spacer to maintain layout on mobile when hamburger is visible */}
+      <div className="hidden md:block" />
+
+      {/* Theme toggle */}
       <Button
         variant="outline"
         size="icon"

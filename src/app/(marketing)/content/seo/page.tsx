@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Loader2, CheckCircle2, AlertCircle, Info } from "lucide-react";
+import { useToast } from "@/components/ui/toast";
 
 interface SeoAnalysis {
   score: number;
@@ -20,6 +21,7 @@ interface SeoAnalysis {
 }
 
 export default function SeoPage() {
+  const { toast } = useToast();
   const [keyword, setKeyword] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -72,6 +74,7 @@ export default function SeoPage() {
       metaDescription: `Discover everything about ${keyword}. Learn the key benefits, features, and why it matters for ${keyword.includes(" ") ? "your needs" : "you"}. Read more.`,
     });
     setLoading(false);
+    toast({ title: "Analysis complete!", description: `SEO Score: ${score}/100`, variant: score >= 70 ? "success" : "warning" });
   };
 
   const getScoreColor = (score: number) => {

@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Send, Calendar, Clock, Trash2, CheckCircle2, AlertCircle } from "lucide-react";
+import { useToast } from "@/components/ui/toast";
 import type { SocialPost, SocialPlatform } from "@/types/social";
 
 const platforms: { value: SocialPlatform; label: string; color: string }[] = [
@@ -34,6 +35,7 @@ const bestTimes: Record<SocialPlatform, string[]> = {
 };
 
 export default function SchedulerPage() {
+  const { toast } = useToast();
   const [content, setContent] = useState("");
   const [platform, setPlatform] = useState<SocialPlatform>("instagram");
   const [date, setDate] = useState("");
@@ -57,10 +59,12 @@ export default function SchedulerPage() {
     setContent("");
     setDate("");
     setTime("");
+    toast({ title: "Post scheduled!", description: `Scheduled for ${date} at ${time}.`, variant: "success" });
   };
 
   const deletePost = (id: string) => {
     setPosts((prev) => prev.filter((p) => p.id !== id));
+    toast({ title: "Post removed", variant: "default" });
   };
 
   return (

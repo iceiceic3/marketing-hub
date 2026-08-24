@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/layout/providers";
-import { Sidebar } from "@/components/layout/sidebar";
-import { Header } from "@/components/layout/header";
+import { LayoutShell } from "@/components/layout/layout-shell";
+import { KeyboardShortcutsProvider } from "@/components/layout/keyboard-shortcuts-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,13 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-screen">
         <Providers>
-          <div className="flex h-screen overflow-hidden">
-            <Sidebar />
-            <div className="flex flex-1 flex-col overflow-hidden">
-              <Header />
-              <main className="flex-1 overflow-y-auto p-6">{children}</main>
-            </div>
-          </div>
+          <KeyboardShortcutsProvider>
+            <LayoutShell>{children}</LayoutShell>
+          </KeyboardShortcutsProvider>
         </Providers>
       </body>
     </html>
